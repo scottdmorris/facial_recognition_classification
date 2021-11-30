@@ -100,7 +100,7 @@ if __name__ == "__main__":
     model.add(Dense(1)) # output layer
     model.add(Activation('sigmoid')) # sigmoid activation function
     
-    model.compile(loss='binary_crossentropy',
+    model.compile(loss='categorical_crossentropy',
                     optimizer='adam',
                     metrics=['accuracy'])
     
