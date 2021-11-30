@@ -13,20 +13,27 @@ import random
 
 # make sure to change filepath for images and unzip file
 
-# creating data path to training data
+# set data path to training data
 DATADIR = "/Users/scottmorris/Desktop/model/Training"
-CATEGORIES = ["Black", "East Asian", "Indian", "Latino", "Middle Eastern", "Southeast Asian", "White"]
+CATEGORIES = ["Black", "East Asian", "Indian", "Latino", # declare labels/classes
+            "Middle Eastern", "Southeast Asian", "White"]
 
 for category in CATEGORIES: 
     path = os.path.join(DATADIR, category) # path to each classification directory
     for img in os.listdir(path): # loop through each image in each classification directory
         img_array = cv2.imread(os.path.join(path, img)) 
-        plt.imshow(img_array, cmap='gray')
-        plt.show() 
+        #plt.imshow(img_array, cmap='gray')
+        #plt.show() # for visualizaition of what computer sees
         break
     break
 
 print(img_array) 
+print(img_array.shape)
+
+img_size = 224
+resized_array = cv2.resize(img_array, (img_size, img_size)) # resize image to 224x224
+plt.imshow(resized_array, cmap='gray')    
+plt.show()
 
 training_data = []
 
@@ -37,62 +44,67 @@ def create_training_data(): # looping through each folder
         for img in os.listdir(path): # loop through each image in each folder
             try:
                 img_array = cv2.imread(os.path.join(path, img)) 
-                training_data.append([img_array, class_num]) # add to training data
+                resized_array = cv2.resize(img_array, (img_size, img_size)) # resize image to 224x224
+                training_data.append([resized_array, class_num]) # add to training data
             except Exception as e:
                 pass
 
-print(len(training_data)) # confirm training data is correct
+if __name__ == "__main__": 
+    create_training_data()
+    print(len(training_data)) # confirm training data is correct
 
-# shuffle data so not just learning from one label at a time
-random.shuffle(training_data)
-                
-X = [] # features
-y = [] # labels
+    # shuffle data so not just learning from one label at a time
+    random.shuffle(training_data)
+          
+    X = [] # features
+    y = [] # labels
 
-for features, label in training_data:
-    X.append(features)
-    y.append(label)
+    for features, label in training_data:
+        X.append(features)
+        y.append(label)
 
-X = np.array(X).reshape(-1, 224, 224, 3)
+    X = np.array(X).reshape(-1, img_size, img_size, 3)
 
-# use pickle to save data
-pickle_out = open("X.pickle", "wb")
-pickle.dump(X, pickle_out)
-pickle_out.close()
+    pickle_out = open("X.pickle", "wb") # save features for re-use
+    pickle.dump(X, pickle_out) 
+    pickle_out.close()
 
-pickle_out = open("y.pickle", "wb")
-pickle.dump(y, pickle_out)
-pickle_out.close()
+    pickle_out = open("y.pickle", "wb") # save labels for re-use 
+    pickle.dump(y, pickle_out) 
+    pickle_out.close()
 
-# to reload data
-X = pickle.load(open("X.pickle","rb"))
-y = pickle.load(open("y.pickle","rb"))
+    # load features
+    pickle_in = open("X.pickle", "rb") 
+    X = pickle.load(pickle_in) # load features 
+    
+    pickle_in = open("y.pickle", "rb")  # load labels
+    y = pickle.load(pickle_in)
 
-X = X/255.0
+    X = X/255.0 # normalize features   
+   # -------------------------------------------------------------
+   # convolutional neural network creation
+    
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3), input_shape = X.shape[1:]))    
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3)))    
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-# create model object and layers
-# 2 x 64 CNN
-model = Sequential()
-model.add(Conv2D(64, (3,3), input_shape=X.shape[1:])) # 64 nodes, 3x3 convolutional filter
-model.add(Activation('relu')) # rectify linear
-model.add(MaxPooling2D(pool_size=(2,2))) # 2x2 pooling
+    model.add(Flatten())  # converts 3D feature maps to 1D feature vectors
+    model.add(Dense(64)) # fully connected layer
 
-model.add(Conv2D(64, (3,3))) # 3x3 convolutional filters
-model.add(Activation('relu')) # rectify linear
-model.add(MaxPooling2D(pool_size=(2,2))) # 2x2 pooling
+    model.add(Dense(1)) # output layer
+    model.add(Activation('sigmoid')) # sigmoid activation function
+    
+    model.compile(loss='binary_crossentropy',
+                    optimizer='adam',
+                    metrics=['accuracy'])
+    
+    model.fit(X, y, batch_size=32, epochs=10) # train model
+    # not sure why it's not working with data
 
-model.add(Flatten()) # flatten to one dimensional data for dense layer
-model.add(Dense(64)) # fully connected layer
-
-# output layer
-model.add(Dense(1)) # single output
-model.add(Activation('sigmoid')) 
-
-model.compile(loss='categorical_crossentropy',
-             optimizer='adam', 
-             metrics=['accuracy'])
-
-# model training instructions
-model.fit(X, y, batch_size=30, epochs=10, validation_split=0.2) # split data into training and validation sets  (20% validation)
 
