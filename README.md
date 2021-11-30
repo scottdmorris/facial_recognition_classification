@@ -10,4 +10,4 @@
 * Numpy
 
 
-Model py is a runnable file which trains the data. The training data consists off 1400 images across 7 racial classifications. 
+Model.py is a runnable file which compiles and fits the model on the training data. The training data consists off 1400 images across 7 racial classifications. 
