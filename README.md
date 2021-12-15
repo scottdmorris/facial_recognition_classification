@@ -1,7 +1,7 @@
 # facial_recognition_classification
 
 ## DEPENDENCIES: ##
-* Was coded on Python 3.8 using Anaconda
+* Was coded on Python 3.8 using Anaconda 
 
 * Tensorflow
 
@@ -12,6 +12,8 @@
 * Matplotlib (for visualization)
 
 * cv2
+
+* Sklearn
 
 
 Click [here](https://drive.google.com/file/d/16xMAO1Du6kXXlbLwuGrkTyIUGvS5UCtt/view?usp=sharing) to access the dataset and training sets. (Too big for github)
