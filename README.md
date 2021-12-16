@@ -3,18 +3,13 @@
 ## DEPENDENCIES: ##
 * Was coded on Python 3.8 using Anaconda 
 
-* Tensorflow
+* Tensorflow version 2.6.0
 
-* Keras
+* Keras version 2.6.0
 
-* Numpy
+* Numpy version 1.19.2
 
-* Matplotlib (for visualization)
-
-* cv2
-
-* Sklearn
-
+* Matplotlib version 3.3.2
 
 Ran on Macbook Pro 2017 3.1 GHz Dual-Core Intel Core i5
 
