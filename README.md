@@ -1,4 +1,4 @@
-# facial_recognition_classification
+# Facial Recognition Model
 
 ## DEPENDENCIES: ##
 * Was coded on Python 3.8 using Anaconda 
