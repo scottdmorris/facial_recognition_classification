@@ -1,4 +1,4 @@
-# Facial Recognition Model
+# CNN Facial Recognition Model
 
 ## DEPENDENCIES: ##
 * Was coded on Python 3.8 using Anaconda 
@@ -13,7 +13,7 @@
 
 Ran on Macbook Pro 2017 3.1 GHz Dual-Core Intel Core i5
 
-Click [here](https://drive.google.com/file/d/16xMAO1Du6kXXlbLwuGrkTyIUGvS5UCtt/view?usp=sharing) to access the dataset and training sets. (Too big for github)
+Click [here](https://drive.google.com/file/d/16xMAO1Du6kXXlbLwuGrkTyIUGvS5UCtt/view?usp=sharing) to access the dataset and training sets. (Too large of a size for Github)
 
 The model should be run in a Jupyter Notebook and remember to change filepaths as needed. 
 
